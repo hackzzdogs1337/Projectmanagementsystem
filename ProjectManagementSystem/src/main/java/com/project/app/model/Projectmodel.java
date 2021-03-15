@@ -1,6 +1,8 @@
 package com.project.app.model;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 /*import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,15 +11,21 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;*/
 import org.springframework.data.mongodb.core.mapping.Document;
 
+
 @Document(collection = "projects")
 public class Projectmodel {
 	@Id
 	private String projectId;
+	@NotNull
 	private String name;
 	private String desc;
+	@NotNull
 	private String status;
+	@NotNull
 	private Date startdate;
+	@NotNull
 	private Date enddate;
+	@NotNull
 	private Date targetedrelease;
 	
 	public String getId() {

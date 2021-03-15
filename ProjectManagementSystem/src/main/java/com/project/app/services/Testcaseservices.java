@@ -5,8 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.app.exceptions.ProjectNotfoundexception;
+import com.project.app.exceptions.RequirementNotFoundexception;
+import com.project.app.exceptions.TestcaseNotfoundException;
+import com.project.app.model.Projectmodel;
+import com.project.app.model.Requirementmodel;
 import com.project.app.model.SequenceGenerator;
 import com.project.app.model.Testcasemodel;
+import com.project.app.repositories.Repository;
+import com.project.app.repositories.Requirementrepo;
 import com.project.app.repositories.Testcaserepo;
 
 @Service
@@ -15,9 +22,19 @@ public class Testcaseservices {
 	@Autowired
 	private Testcaserepo mongorepo;
 	
-	public Testcasemodel createtestcase(String projectid,String reqid,Testcasemodel testcase) {
-		testcase.setProjectid(projectid);
-		testcase.setReqid(reqid);
+	@Autowired
+	private Repository projectrepo;
+	
+	@Autowired
+	private Requirementrepo reqrepo;
+	
+	public Testcasemodel createtestcase(Testcasemodel testcase) throws ProjectNotfoundexception, RequirementNotFoundexception {
+		String projectid=testcase.getProjectid();
+		String reqid=testcase.getReqid();
+		Projectmodel project=projectrepo.findByProjectId(projectid);
+		Requirementmodel req=reqrepo.findByReqid(reqid);
+		if(project!=null) {
+			if(req!=null) {
 		List<Testcasemodel> testcases=mongorepo.findlastinserteddocs(projectid, reqid);
 		String []arr=reqid.split("-");
 		if(testcases.size()==0) {
@@ -32,6 +49,10 @@ public class Testcaseservices {
 		}
 		mongorepo.insert(testcase);
 		return testcase;
+		}
+			throw new RequirementNotFoundexception(reqid);
+		}
+		throw new ProjectNotfoundexception(projectid);
 		
 	}
 	
@@ -52,13 +73,13 @@ public class Testcaseservices {
 	}
 	
 	//edit testcase by id
-	public String edittestcase(String testid,Testcasemodel testcase) {
+	public String edittestcase(String testid,Testcasemodel testcase) throws TestcaseNotfoundException {
 		if(mongorepo.existsById(testid)) {
 			testcase.setTestcaseid(testid);
 			mongorepo.save(testcase);
 			return "Edited successfully";
 		}
-		return "Not found";
+		throw new TestcaseNotfoundException(testid);
 	}
 	
 }

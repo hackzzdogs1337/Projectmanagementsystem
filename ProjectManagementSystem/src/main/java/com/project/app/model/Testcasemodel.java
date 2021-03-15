@@ -2,6 +2,7 @@ package com.project.app.model;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,13 +11,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Testcasemodel {
 	@Id
 	private String testcaseid;
+	@NotNull
 	private String reqid;
+	@NotNull
 	private String projectid;
+	@NotNull
 	private String testcasename;
 	private String testcasedesc;
+	@NotNull
 	private String input;
+	@NotNull
 	private String expectedresults;
+	@NotNull
 	private String actualresults;
+	@NotNull
 	private String status;
 	private LocalDateTime lastupdated;
 	private boolean isDeleted;

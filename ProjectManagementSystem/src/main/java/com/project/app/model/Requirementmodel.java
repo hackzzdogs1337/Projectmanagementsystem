@@ -1,5 +1,7 @@
 package com.project.app.model;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,7 +12,9 @@ public class Requirementmodel {
 	@Id
 	private String reqid;
 	private String reqdesc;
+	@NotNull
 	private String projectid;
+	@NotNull
 	private String status;
 	private boolean isDeleted;
 	public String getReqid() {
